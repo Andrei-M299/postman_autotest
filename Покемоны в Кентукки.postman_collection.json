@@ -1,0 +1,473 @@
+{
+	"info": {
+		"_postman_id": "8a1fd097-de87-4a27-bf45-f8ee1155c3fa",
+		"name": "Покемоны в Кентукки",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "29385317"
+	},
+	"item": [
+		{
+			"name": "Создание покемона",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Your test name\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.message).to.eql(\"Покемон создан\");\r",
+							"});\r",
+							"\r",
+							"var response = JSON.parse(responseBody);\r",
+							"pm.collectionVariables.set(\"pokemon_id\", response.id);\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "trainer_token",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Endor\",\r\n    \"photo\": \"https://dolnikov.ru/pokemons/albums/936.png\"\r\n}"
+				},
+				"url": {
+					"raw": "{{host}}/pokemons",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"pokemons"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Создание случайного покемона",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "trainer_token",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"{{$randomFirstName}}\",\r\n    \"photo\": \"https://dolnikov.ru/pokemons/albums/1002.png\"\r\n}"
+				},
+				"url": {
+					"raw": "{{host}}/pokemons",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"pokemons"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Поймать в покебол",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "trainer_token",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"pokemon_id\": \"{{pokemon_id}}\"\r\n}"
+				},
+				"url": {
+					"raw": "{{host}}/trainers/add_pokeball",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"trainers",
+						"add_pokeball"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Поиск соперника",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{host}}/pokemons?in_pokeball=1",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"pokemons"
+					],
+					"query": [
+						{
+							"key": "in_pokeball",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Мои покемоны",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Проверяем id тренера в выдаче\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"pm.expect(jsonData[0].trainer_id).to.eql(\"2133\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "{{host}}/pokemons?trainer_id=2133",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"pokemons"
+					],
+					"query": [
+						{
+							"key": "trainer_id",
+							"value": "2133"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Битва",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "trainer_token",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"attacking_pokemon\": \"9562\",\r\n    \"defending_pokemon\": \"9563\"\r\n}"
+				},
+				"url": {
+					"raw": "{{host}}/battle",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"battle"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Битва и Поиск",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.sendRequest (\"https://api.pokemonbattle.me:9104/pokemons?in_pokeball=1\", function (err, response) {\r",
+							"  var jsonData = response.json();\r",
+							"  var enemy_id = jsonData[5].id;\r",
+							"  pm.collectionVariables.set(\"enemy_id\", enemy_id);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "trainer_token",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"attacking_pokemon\": \"{{pokemon_id}}\",\r\n    \"defending_pokemon\": \"{{enemy_id}}\"\r\n}"
+				},
+				"url": {
+					"raw": "{{host}}/battle",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"battle"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Убить покемона",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "trainer_token",
+						"value": "{{token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"pokemon_id\": \"9536\"\r\n}"
+				},
+				"url": {
+					"raw": "{{host}}/pokemons/kill",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"pokemons",
+						"kill"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Смена аватара",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "trainer_token",
+						"value": "{{token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"card_number\": \"2200 0000 0000 0046\",\r\n    \"card_csv\": \"125\",\r\n    \"card_actual\": \"10/24\",\r\n\t  \"num\": \"56456\", // это пароль от смс,\r\n\t\t\"avatar_id\": \"4\"\r\n}"
+				},
+				"url": {
+					"raw": "{{host}}//trainers/change_avatar",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"",
+						"trainers",
+						"change_avatar"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "host",
+			"value": "https://api.pokemonbattle.me:9104",
+			"type": "string"
+		},
+		{
+			"key": "token",
+			"value": "2f7146f7c3f794a81aef8dae3adbd31d",
+			"type": "string"
+		},
+		{
+			"key": "pokemon_id",
+			"value": ""
+		},
+		{
+			"key": "enemy_id",
+			"value": ""
+		}
+	]
+}
